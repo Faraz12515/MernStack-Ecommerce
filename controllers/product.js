@@ -14,12 +14,15 @@ exports.create = (req, res) => {
     }
     let product = new Product(fields);
 
+    // 1Kb = 1000
+    // 1mb = 1000000
+
     // Image Upload //
     if (files.photo) {
       product.photo.data = fs.readFileSync(files.photo.path);
       product.photo.contentType = files.photo.type;
     }
-    product.save(() => {
+    product.save((err, result) => {
       if (err) {
         return res.status(400).json({ error: errorHandler });
       }
