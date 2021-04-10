@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken"); // to generate signed token
 const expressJwt = require("express-jwt"); // for authorization check
 
-const User = require("../models/auth");
+const User = require("../models/user");
 const { errorHandler } = require("../helpers/dbErrorHandler");
 
 // SIGNUP //
