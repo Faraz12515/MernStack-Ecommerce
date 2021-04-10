@@ -4,6 +4,7 @@ const expressJwt = require("express-jwt"); // for authorization check
 const User = require("../models/user");
 const { errorHandler } = require("../helpers/dbErrorHandler");
 
+// SIGNUP //
 exports.signup = (req, res) => {
   console.log("req.body", req.body);
   const user = new User(req.body);
@@ -17,6 +18,7 @@ exports.signup = (req, res) => {
   });
 };
 
+// SIGNIN //
 exports.signin = (req, res) => {
   // find the user based on email
   const { email, password } = req.body;
@@ -41,7 +43,15 @@ exports.signin = (req, res) => {
   });
 };
 
+// SIGNOUT //
 exports.signout = (req, res) => {
   res.clearCookie("t");
   res.json({ message: "Signout successfully" });
 };
+
+// SIGNIN MIDDLEWARE //
+exports.requireSignin = expressJwt({
+  secret: process.env.JWT_SECRET,
+  algorithms: ["HS256"], // added later
+  userProperty: "auth",
+});
