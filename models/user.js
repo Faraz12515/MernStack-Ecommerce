@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
-const crypto = require("crypto");
-const uuid = require("uuid");
+const crypto = require("crypto"); //for hashing password
+const uuid = require("uuid"); // for random id
 
 const userSchema = new mongoose.Schema(
   {
