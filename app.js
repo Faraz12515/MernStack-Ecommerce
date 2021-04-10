@@ -1,5 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const morgan = require("morgan");
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
 require("dotenv").config();
 // import routes
 const userRoutes = require("./routes/user");
@@ -15,6 +18,11 @@ mongoose
     useCreateIndex: true,
   })
   .then(() => console.log("MongoDB Conncted..."));
+
+//middlewares
+app.use(morgan("dev"));
+app.use(bodyParser.json());
+app.use(cookieParser());
 
 // routes middleware
 app.use("/api", userRoutes);
