@@ -171,3 +171,13 @@ exports.listRelated = (req, res) => {
       res.json({ products });
     });
 };
+
+// List Product Categories
+exports.listCategories = (req, res) => {
+  Product.distinct("category", {}, (err, categories) => {
+    if (err) {
+      return res.status(400).json({ error: "Procts not found" });
+    }
+    res.json({ categories });
+  });
+};
