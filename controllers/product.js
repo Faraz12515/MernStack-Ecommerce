@@ -4,9 +4,10 @@ const fs = require("fs");
 
 const Product = require("../models/product");
 const { errorHandler } = require("../helpers/dbErrorHandler");
+const product = require("../models/product");
 
 // Getting Products by Id
-exports.productId = (req, res, next, id) => {
+exports.productById = (req, res, next, id) => {
   Product.findById(id).exec((err, product) => {
     if (err || !product) {
       return res.status(400).json({ error: "Product not found" });
@@ -63,6 +64,20 @@ exports.create = (req, res) => {
         return res.status(400).json({ error: errorHandler });
       }
       res.json({ result });
+    });
+  });
+};
+
+//Removing Procuts by userID and productID
+
+exports.remove = (req, res) => {
+  let product = req.product;
+  product.remove((err) => {
+    if (err) {
+      return res.status(400).json({ error: errorHandler(err) });
+    }
+    res.json({
+      message: "Product deleted successfully",
     });
   });
 };
