@@ -17,6 +17,7 @@ exports.productById = (req, res, next, id) => {
   });
 };
 
+// Read Products
 exports.read = (req, res) => {
   req.product.photo = undefined;
   return res.json(req.product);
@@ -68,7 +69,7 @@ exports.create = (req, res) => {
   });
 };
 
-//Removing Procuts by userID and productID
+//Remove Procuts by userID and productID
 exports.remove = (req, res) => {
   let product = req.product;
   product.remove((err) => {
@@ -79,7 +80,7 @@ exports.remove = (req, res) => {
   });
 };
 
-//Update products
+//Update Products
 exports.update = (req, res) => {
   let form = new formidable.IncomingForm();
   form.keepExtensions = true;
