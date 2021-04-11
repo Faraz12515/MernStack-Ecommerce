@@ -7,6 +7,7 @@ const {
   read,
   remove,
   update,
+  list,
 } = require("../controllers/product");
 const { requireSignin, isAuth, isAdmin } = require("../controllers/auth");
 const { userById } = require("../controllers/user");
@@ -27,6 +28,8 @@ router.delete(
   isAdmin,
   remove
 );
+
+router.get("/products", list);
 
 router.param("userId", userById);
 router.param("productId", productById);
