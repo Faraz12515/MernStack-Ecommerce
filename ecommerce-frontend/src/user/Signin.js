@@ -6,6 +6,7 @@ import axios from "axios";
 import Success from "./Success";
 import Failed from "./Failed";
 import Home from "../core/Home";
+import { authenticate } from "../auth";
 
 const Signin = ({ history }) => {
   const [switchState, setSwitchState] = useState(true);
@@ -31,8 +32,11 @@ const Signin = ({ history }) => {
         console.log(`response.data :>> `, response.data);
         response.data.message == true
           ? setTimeout(() => {
+              authenticate(
+                response.data,
+                history.push("/") && setSwitchState(false)
+              );
               Success("Successfully Signin");
-              history.push("/") && setSwitchState(false);
             }, 500)
           : Failed("Oops! Something Went Wrong");
       } catch (err) {
@@ -47,7 +51,7 @@ const Signin = ({ history }) => {
     } else if (email !== email || password !== password) {
       Failed("Email and password do not match");
     } else {
-      Failed("Invalid Email or Password");
+      Failed("Email and password do not match");
     }
   };
 
