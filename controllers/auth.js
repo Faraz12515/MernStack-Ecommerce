@@ -14,7 +14,7 @@ exports.signup = (req, res) => {
     }
     user.salt = undefined;
     user.hashed_password = undefined;
-    res.json({ user });
+    res.json({ user, message: true });
   });
 };
 
@@ -39,7 +39,7 @@ exports.signin = (req, res) => {
     res.cookie("t", token, { expire: new Date() + 9999 });
     //return response with user and token to frontend client
     const { _id, name, email, role } = user;
-    return res.json({ token, user: { _id, name, email, role } });
+    return res.json({ token, user: { _id, name, email, role }, message: true });
   });
 };
 
