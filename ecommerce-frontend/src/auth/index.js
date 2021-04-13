@@ -1,10 +1,12 @@
 import axios from "axios";
 import { API } from "../config";
+import Success from "../user/Success";
 
 // Saving User Data and Token //
 export const authenticate = (data, next) => {
   if (typeof window !== "undefined") {
     localStorage.setItem("jwt", JSON.stringify(data));
+    Success("Successfully Signin");
   }
 };
 

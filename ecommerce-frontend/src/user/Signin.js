@@ -30,15 +30,11 @@ const Signin = ({ history }) => {
           password: password,
         });
         console.log(`response.data :>> `, response.data);
-        response.data.message == true
-          ? setTimeout(() => {
-              authenticate(
-                response.data,
-                history.push("/") && setSwitchState(false)
-              );
-              Success("Successfully Signin");
-            }, 500)
-          : Failed("Oops! Something Went Wrong");
+        response.data.message == true &&
+          authenticate(
+            response.data,
+            history.push("/") && setSwitchState(false)
+          );
       } catch (err) {
         console.log(`err`, err);
       }

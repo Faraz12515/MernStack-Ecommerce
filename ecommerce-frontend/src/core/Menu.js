@@ -13,11 +13,11 @@ const isActive = (history, path) => {
 
 const Menu = ({ history }) => {
   //Handling Signout with setTimeout
-  const handleSignOut = () => {
-    setTimeout(() => {
-      signout(history.push("/")) && Success("Successfully Signout");
-    }, 500);
-  };
+  // const handleSignOut = () => {
+  //   setTimeout(() => {
+  //     Success("Successfully Signout") && signout(history.push("/"));
+  //   }, 500);
+  // };
 
   return (
     <div>
@@ -27,17 +27,17 @@ const Menu = ({ history }) => {
             Home
           </Link>
         </li>
+        <li className="nav--item">
+          <Link
+            className="nav-link"
+            style={isActive(history, "/dashboard")}
+            to="/dashboard"
+          >
+            Dashboard
+          </Link>
+        </li>
         {!isAuthenticated() && (
           <Fragment>
-            <li className="nav--item">
-              <Link
-                className="nav-link"
-                style={isActive(history, "/signup")}
-                to="/signup"
-              >
-                Signup
-              </Link>
-            </li>
             <li className="nav--item">
               <Link
                 className="nav-link"
@@ -47,6 +47,15 @@ const Menu = ({ history }) => {
                 Signin
               </Link>
             </li>
+            <li className="nav--item">
+              <Link
+                className="nav-link"
+                style={isActive(history, "/signup")}
+                to="/signup"
+              >
+                Signup
+              </Link>
+            </li>
           </Fragment>
         )}
         {isAuthenticated() && (
@@ -54,7 +63,9 @@ const Menu = ({ history }) => {
             <span
               className="nav-link"
               style={{ cursor: "pointer", color: "white" }}
-              onClick={handleSignOut}
+              onClick={() => (
+                signout(history.push("/")), Success("Successfully Signout")
+              )}
             >
               Signout
             </span>
