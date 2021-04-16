@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link, withRouter } from "react-router-dom";
 import Layout from "../core/Layout";
-import { API } from "../config";
-import axios from "axios";
-import Success from "./Success";
-import Failed from "./Failed";
-import Signin from "./Signin";
+import { signup } from "../auth";
 
 const Signup = ({ history }) => {
-  const [switchState, setSwitchState] = useState(true);
   const [values, setValues] = useState({
     name: "",
     email: "",
@@ -23,41 +18,53 @@ const Signup = ({ history }) => {
     setValues({ ...values, error: false, [name]: e.target.value });
   };
 
-  const signUp = async () => {
-    // console.log(`name,email,password`, name, email, password);
-    if (name !== "" && email !== "" && password !== "") {
-      try {
-        let response = await axios.post(`${API}/signup`, {
-          name: name,
-          email: email,
-          password: password,
-        });
-        console.log(`response.data :>> `, response.data);
-        response.data.message == true
-          ? setTimeout(() => {
-              Success("New account is created successfully. Please Signin");
-              history.push("/signin") && setSwitchState(false);
-            }, 500)
-          : Failed("Oops! Something Went Wrong");
-      } catch (err) {
-        console.log(`err`, err);
-      }
-    } else {
-      Failed("All fields must be filled!");
-    }
-  };
-
   const clickSubmit = (e) => {
     e.preventDefault();
-    signUp();
+
+    setValues({ ...values, error: false });
+    signup({ name, email, password }).then((data) => {
+      if (data.error) {
+        setValues({ ...values, error: data.error, success: false });
+        console.log(`data.error`, data.error);
+      } else {
+        setValues({
+          ...values,
+          name: "",
+          email: "",
+          password: "",
+          error: "",
+          success: true,
+        });
+      }
+    });
   };
 
-  return switchState === true ? (
+  const showError = () => (
+    <div
+      className="alert alert-danger"
+      style={{ display: error ? "" : "none" }}
+    >
+      {error}
+    </div>
+  );
+
+  const showSuccess = () => (
+    <div
+      className="alert alert-info"
+      style={{ display: success ? "" : "none" }}
+    >
+      New account is created. Please <Link to="/signin">Signin</Link>
+    </div>
+  );
+
+  return (
     <Layout
       title="Signup"
       description="Signup Node React E-Commerce App"
       className="container col-md-8 offset-md-2"
     >
+      {showSuccess()}
+      {showError()}
       <form>
         <div className="form-group">
           <label className="text-muted">Name</label>
@@ -91,8 +98,6 @@ const Signup = ({ history }) => {
         </button>
       </form>
     </Layout>
-  ) : (
-    <Signin setSwitchState={setSwitchState} />
   );
 };
 

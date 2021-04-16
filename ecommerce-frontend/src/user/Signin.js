@@ -1,67 +1,74 @@
-import React, { useState } from "react";
-import { Link, withRouter } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, Redirect, withRouter } from "react-router-dom";
 import Layout from "../core/Layout";
-import { API } from "../config";
-import axios from "axios";
-import Success from "./Success";
-import Failed from "./Failed";
-import Home from "../core/Home";
-import { authenticate } from "../auth";
+import { signin } from "../auth";
+import Success from "../user/Success";
 
 const Signin = ({ history }) => {
-  const [switchState, setSwitchState] = useState(true);
   const [values, setValues] = useState({
     email: "",
     password: "",
+    error: "",
+    loading: false,
+    redirectToReferrer: false,
   });
-  const { name, email, password } = values;
+  const { email, password, error, loading, redirectToReferrer } = values;
 
   // Higher Order Function (Function into another function)
   const handleChange = (name) => (e) => {
     setValues({ ...values, error: false, [name]: e.target.value });
   };
 
-  const signIn = async () => {
-    // console.log(`name,email,password`, name, email, password);
-    if (email !== "" && password !== "") {
-      try {
-        let response = await axios.post(`${API}/signin`, {
-          email: email,
-          password: password,
+  const clickSubmit = (e) => {
+    e.preventDefault();
+
+    setValues({ ...values, error: false, loading: true });
+    signin({ email, password }).then((data) => {
+      if (data.error) {
+        setValues({ ...values, error: data.error, loading: false });
+        console.log(`data.error`, data.error);
+      } else {
+        setValues({
+          ...values,
+          redirectToReferrer: true,
         });
-        console.log(`response.data :>> `, response.data);
-        response.data.message == true &&
-          authenticate(
-            response.data,
-            history.push("/") && setSwitchState(false)
-          );
-      } catch (err) {
-        console.log(`err`, err);
       }
-    } else if (email === "" && password === "") {
-      Failed("All fields must be filled!");
-    } else if (email === email || password !== "") {
-      Failed("Email and password do not match");
-    } else if (email !== "" || password === password) {
-      Failed("Email and password do not match");
-    } else if (email !== email || password !== password) {
-      Failed("Email and password do not match");
-    } else {
-      Failed("Email and password do not match");
+    });
+  };
+
+  const showError = () => (
+    <div
+      className="alert alert-danger"
+      style={{ display: error ? "" : "none" }}
+    >
+      {error}
+    </div>
+  );
+
+  const showLoading = () =>
+    loading && (
+      <div
+        className="alert alert-info"
+        style={{ display: loading ? "" : "none" }}
+      >
+        Loading...
+      </div>
+    );
+
+  const redirectUser = () => {
+    if (redirectToReferrer) {
+      return <Redirect to="/" />;
     }
   };
 
-  const clickSubmit = (e) => {
-    e.preventDefault();
-    signIn();
-  };
-
-  return switchState === true ? (
+  return (
     <Layout
       title="Signin"
       description="Signin Node React E-Commerce App"
       className="container col-md-8 offset-md-2"
     >
+      {showLoading()}
+      {showError()}
       <form>
         <div className="form-group">
           <label className="text-muted">Email</label>
@@ -85,9 +92,8 @@ const Signin = ({ history }) => {
           Submit
         </button>
       </form>
+      {redirectUser()}
     </Layout>
-  ) : (
-    <Home setSwitchState={setSwitchState} />
   );
 };
 
