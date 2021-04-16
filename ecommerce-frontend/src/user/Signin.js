@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, Redirect, withRouter } from "react-router-dom";
 import Layout from "../core/Layout";
-import { signin } from "../auth";
-import { authenticate } from "../auth";
+import { signin, authenticate, isAuthenticated } from "../auth";
 
 const Signin = ({ history }) => {
   const [values, setValues] = useState({
@@ -13,6 +12,7 @@ const Signin = ({ history }) => {
     redirectToReferrer: false,
   });
   const { email, password, error, loading, redirectToReferrer } = values;
+  const { user } = isAuthenticated();
 
   // Higher Order Function (Function into another function)
   const handleChange = (name) => (e) => {
@@ -59,7 +59,11 @@ const Signin = ({ history }) => {
 
   const redirectUser = () => {
     if (redirectToReferrer) {
-      return <Redirect to="/" />;
+      if (user && user.role === 1) {
+        return <Redirect to="/admin/dashboard" />;
+      } else {
+        return <Redirect to="/user/dashboard" />;
+      }
     }
   };
 
