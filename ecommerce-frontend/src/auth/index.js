@@ -47,21 +47,17 @@ export const signin = (user) => {
 export const authenticate = (data, next) => {
   if (typeof window !== "undefined") {
     localStorage.setItem("jwt", JSON.stringify(data));
-    Success("Successfully Signin");
+    next();
   }
 };
 
 // Signout User //
-export const signout = async () => {
+export const signout = () => {
   if (typeof window !== "undefined") {
     localStorage.removeItem("jwt");
-
-    try {
-      let response = await axios.get(`${API}/signout`, {});
-      console.log(`signout`, response.data);
-    } catch (err) {
-      console.log(`err`, err);
-    }
+    return fetch(`${API}/signout`, {})
+      .then((response) => console.log(`signout`, response))
+      .catch((err) => console.log(`err`, err));
   }
 };
 

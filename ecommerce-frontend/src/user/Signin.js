@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, Redirect, withRouter } from "react-router-dom";
 import Layout from "../core/Layout";
 import { signin } from "../auth";
-import Success from "../user/Success";
+import { authenticate } from "../auth";
 
 const Signin = ({ history }) => {
   const [values, setValues] = useState({
@@ -28,9 +28,11 @@ const Signin = ({ history }) => {
         setValues({ ...values, error: data.error, loading: false });
         console.log(`data.error`, data.error);
       } else {
-        setValues({
-          ...values,
-          redirectToReferrer: true,
+        authenticate(data, () => {
+          setValues({
+            ...values,
+            redirectToReferrer: true,
+          });
         });
       }
     });

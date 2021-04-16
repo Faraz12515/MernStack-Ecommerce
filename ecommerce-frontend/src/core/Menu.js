@@ -2,6 +2,7 @@ import React, { Fragment } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { signout, isAuthenticated } from "../auth";
 import Success from "../user/Success";
+import Failed from "../user/Failed";
 
 const isActive = (history, path) => {
   if (history.location.pathname === path) {
@@ -64,7 +65,7 @@ const Menu = ({ history }) => {
               className="nav-link"
               style={{ cursor: "pointer", color: "white" }}
               onClick={() => (
-                signout(history.push("/")), Success("Successfully Signout")
+                signout(history.push("/")), Failed("Successfully Signout")
               )}
             >
               Signout
