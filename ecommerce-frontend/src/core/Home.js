@@ -14,7 +14,8 @@ const Home = () => {
       if (data.error) {
         setError(data.error);
       } else {
-        setProductsBySell(data);
+        setProductsBySell(data.products);
+        console.log(`data`, data);
       }
     });
   };
@@ -25,7 +26,8 @@ const Home = () => {
       if (data.error) {
         setError(data.error);
       } else {
-        setProductsByArrival(data);
+        setProductsByArrival(data.products);
+        console.log(`data`, data);
       }
     });
   };
@@ -42,20 +44,20 @@ const Home = () => {
       className="container-fluid"
     >
       <h2 className="mb-4">Best Sellers</h2>
-      {/* <div className="row">
-        {productsBySell &&
+      <div className="row">
+        {productsBySell.length &&
           productsBySell.map((product, i) => {
             return <Card key={i} product={product} />;
           })}
-      </div> */}
+      </div>
 
       <h2 className="mb-4">New Arrivals</h2>
-      {/* <div className="row">
+      <div className="row">
         {productsByArrival &&
           productsByArrival.map((product, i) => {
             return <Card key={i} product={product} />;
           })}
-      </div> */}
+      </div>
     </Layout>
   );
 };
