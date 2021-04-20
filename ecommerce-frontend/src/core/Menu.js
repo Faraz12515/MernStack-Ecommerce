@@ -6,7 +6,7 @@ import Failed from "../user/Failed";
 
 const isActive = (history, path) => {
   if (history.location.pathname === path) {
-    return { color: "#ff9900" };
+    return { color: "#333333" };
   } else {
     return { color: "#ffffff" };
   }
